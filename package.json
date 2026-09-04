@@ -7,7 +7,8 @@
     "dev": "node server/index.js",
     "start": "node server/index.js",
     "test": "node --test",
-    "test:quick": "node --test test/quick.test.js"
+    "test:quick": "node --test test/quick.test.js",
+    "smoke:live": "node scripts/live-smoke.mjs"
   },
   "dependencies": {
     "express": "^5.1.0",

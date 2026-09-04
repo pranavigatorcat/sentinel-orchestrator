@@ -15,3 +15,14 @@ export const Scenario = z.object({
 export const TestPlan = z.object({
   application: z.string(), assumptions: z.array(z.string()), scenarios: z.array(Scenario), coverageNotes: z.array(z.string())
 });
+
+export const CoverageReview = z.object({
+  score: z.number().min(0).max(100),
+  gaps: z.array(z.object({ severity: z.enum(['high', 'medium', 'low', 'info']), area: z.string(), recommendation: z.string() })),
+  uncoveredRequirements: z.array(z.string()),
+  decision: z.string()
+});
+
+export const GeneratedTest = z.object({
+  scenarioId: z.string(), title: z.string(), source: z.string().min(20), selectors: z.array(z.string()).default([])
+});

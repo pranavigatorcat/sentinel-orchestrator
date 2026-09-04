@@ -6,7 +6,7 @@
 
 ## Inputs and output
 
-The Healer consumes normalised execution outcomes. For every repair it returns a test id, classification, confidence, reasoning, before/after selectors, action, and result. It emits `healer.interventions-ready`.
+The Healer consumes normalised execution outcomes and asks the configured LLM for a classification of every failure (or an explicit no-action conclusion when there are none). For every repair it returns a test id, classification, confidence, reasoning, before/after selectors, action, and result. It emits `healer.interventions-ready` with its strategy.
 
 ## Classification policy
 

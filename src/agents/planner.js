@@ -18,8 +18,11 @@ export class PlannerAgent {
         scenario('SC-04', 'Navigate without losing user context', 'medium', 'edge', ['Begin a user task', 'Use a navigation control', 'Return to the task'], 'Navigation is usable and expected state is preserved or explained.', ['navigation', 'edge'])
       ], coverageNotes: ['Every plan includes a happy path, a validation path, and a recovery path to prevent shallow coverage.']
     };
-    const plan = demoMode ? baseline : (await askForPlan({ observation, intent }) ?? baseline);
-    emit('planner.plan-ready', { observation, plan, strategy: plan === baseline ? 'structured-fallback' : 'structured-llm' });
+    const llm = demoMode ? { plan: null, diagnostic: 'showcase fixture selected' } : await askForPlan({ observation, intent });
+    const plan = llm.plan ?? baseline;
+    const hasApiKey = process.env.LLM_API_KEY || process.env.OPENCODE_GO_API_KEY || process.env.OPENCODE_API_KEY || process.env.OPENAI_API_KEY;
+    const strategy = demoMode ? 'showcase-fixture' : llm.plan ? 'structured-llm' : hasApiKey ? `structured-fallback (${llm.diagnostic})` : 'structured-fallback (no API key)';
+    emit('planner.plan-ready', { observation, plan, strategy });
     return TestPlan.parse(plan);
   }
 }

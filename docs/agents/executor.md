@@ -8,9 +8,11 @@
 
 Showcase mode is deterministic: three tests pass and one fails because its locator resolves to zero elements. Each result contains a duration and a human-readable evidence string. This is intentionally fast enough to rerun during a judge Q&A.
 
-## Live target handoff
+## Live target behaviour
 
-Live execution is deliberately marked `blocked` until a team member configures safe, target-specific actions and credentials. This is safer than clicking unknown production controls from a generic agent. To complete it during the hackathon:
+For `https://www.saucedemo.com/`, the Executor now runs a safe, disposable browser suite: successful login, rejected credentials, add-to-cart, checkout validation, successful checkout, and logout. It uses an isolated browser context per generated scenario and returns captured pass/fail evidence. Supply different disposable credentials through `SAUCE_USERNAME` and `SAUCE_PASSWORD` if needed.
+
+Other targets are deliberately marked `blocked` until a team member configures safe, target-specific actions and credentials. This is safer than clicking unknown production controls from a generic agent. To complete another target during the hackathon:
 
 1. Launch Chromium once with a clean context and the organiser-provided credentials.
 2. Use the generated source and run one independent page/context per scenario.

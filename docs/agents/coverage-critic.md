@@ -6,7 +6,7 @@
 
 ## Inputs and output
 
-It consumes a `TestPlan` and optional PRD text. It returns a coverage score, gap objects (`severity`, `area`, `recommendation`), requirement statements that are not clearly represented in the plan, and a decision. It emits `critic.coverage-reviewed`.
+It consumes a `TestPlan` and optional PRD text. It makes an independent structured LLM assessment, validates the response with `CoverageReview`, then returns a coverage score, gap objects (`severity`, `area`, `recommendation`), requirement statements that are not clearly represented in the plan, and a decision. It emits `critic.coverage-reviewed` with its `structured-llm` or fallback strategy.
 
 ## Judgement rules
 

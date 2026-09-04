@@ -6,7 +6,7 @@
 
 ## Output contract
 
-For each scenario the Generator returns an id, originating scenario id, title, selector status, generated source text, and initial execution state. It emits `generator.tests-ready` with validation counts.
+For each scenario the Generator asks the configured LLM for Playwright source, then validates that exactly one structurally valid test maps to every approved scenario. It returns an id, originating scenario id, title, selector status, generated source text, and initial execution state. It emits `generator.tests-ready` with validation counts and its strategy.
 
 The generated source uses Playwright conventions: `page.goto`, semantic/attribute locators, action, and assertion. It is an agent-produced artefact; no manually authored end-test fixture is used in the pipeline.
 

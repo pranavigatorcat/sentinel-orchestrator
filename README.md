@@ -14,12 +14,14 @@ npm run dev
 
 Open `http://localhost:3000`, leave **Showcase mode** on, and select **Launch test mission**. The deterministic run completes with four scenarios, an explicit stale selector, a confident `broken-test-script` classification, and a healed test. It takes well under a second and needs no API key, browser download, login, or network target.
 
+With a provider key and Chromium configured, run `npm run smoke:live` for a terminal-only live-planning smoke test against SauceDemo. It requires a real API call and succeeds only when the Planner reports `structured-llm`.
+
 ## Team setup for a real target
 
 1. Use Node 18 or newer and install dependencies with `npm install`.
 2. Download the browser used by the optional live explorer: `npx playwright install chromium`.
 3. Start the local workbench: `npm run dev`.
-4. To use an LLM plan, set `OPENAI_API_KEY` (and optionally `OPENAI_MODEL`) in `.env`. Disable Showcase mode, provide an HTTPS URL, and, when required, add target-specific credentials/configuration before executing meaningful mutations.
+4. To use an LLM plan, configure one provider in `.env`. For OpenCode Go, set `OPENCODE_GO_API_KEY` and optionally `LLM_MODEL=kimi-k2.7-code`; Sentinel uses its compatible endpoint automatically. For general OpenCode inference, set `OPENCODE_API_KEY` and optionally `LLM_MODEL=kimi-k2.5`; if the value is an OpenCode user-session token rather than a service-account key, also set `OPENCODE_ORG_ID`. For another OpenAI-compatible provider, set `LLM_API_KEY`, `LLM_BASE_URL`, and `LLM_MODEL`. Direct OpenAI remains supported through `OPENAI_API_KEY` and optional `OPENAI_MODEL`. Disable Showcase mode, provide an HTTPS URL, and, when required, add target-specific credentials/configuration before executing meaningful mutations.
 
 Do not paste credentials into the dashboard or commit them. Keep them in a local `.env` file excluded by `.gitignore`. This prototype does not currently persist credentials or screenshots.
 
@@ -31,7 +33,7 @@ Do not paste credentials into the dashboard or commit them. Keep them in a local
 | Planner and human-readable plan | Deterministic demo target | DOM snapshot-based baseline |
 | Coverage critique / optional PRD gaps | Yes | Yes |
 | Generated test source and selector status | Yes | Yes |
-| Execution and healing | Deterministic end-to-end proof | Deliberately blocked until target actions/credentials are configured |
+| Execution and healing | Deterministic end-to-end proof | SauceDemo runs live login/cart/checkout/logout; other targets are blocked until configured |
 | Decision dashboard / quality report | Yes | Yes |
 
 The honest demo story is: *we have a complete, inspectable autonomous loop, and use an intentionally reproducible checkout fixture to demonstrate successful diagnosis and healing. The live adapter is isolated so we can specialise it safely for the organiser's credentials on the day.* Do not claim arbitrary-production-app execution until `ExecutorAgent` has been tailored and verified against the supplied target.
@@ -52,6 +54,8 @@ flowchart LR
 ```
 
 The orchestrator owns state transitions. Agents return plain structured objects and never call one another directly, which keeps them replaceable and easy to unit-test. `src/infrastructure/browser-explorer.js` is the single browser boundary; replace it, or add an LLM adapter, without changing the UI or orchestration logic.
+
+When a configured provider is available, Planner, Coverage Critic, Generator, and Healer each make an independent structured LLM call. Their JSON is validated at the boundary; a deterministic fallback is visible in the terminal whenever a provider response is unavailable or invalid.
 
 ## Repository map
 

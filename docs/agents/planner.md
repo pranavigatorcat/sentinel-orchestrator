@@ -16,7 +16,7 @@ Returns a validated `TestPlan`: application name, visible assumptions, scenarios
 
 ## Current behaviour
 
-The plan always has four evidence-oriented fallback flows: success, invalid input, recovery from failure, and navigation/context. This guards against the shallow “only happy path” output common in generated testing. In showcase mode it uses a known checkout fixture so the presentation is stable. In live mode `browser-explorer.js` captures title, links, and controls. If `OPENAI_API_KEY` is configured, the Planner asks `OPENAI_MODEL` (default `gpt-4.1-mini`) for schema-shaped JSON; invalid or unavailable model responses fall back safely and are marked in the event payload.
+The plan always has four evidence-oriented fallback flows: success, invalid input, recovery from failure, and navigation/context. This guards against the shallow “only happy path” output common in generated testing. In showcase mode it uses a known checkout fixture so the presentation is stable. In live mode `browser-explorer.js` captures title, links, and controls. The provider boundary supports an OpenCode Go key (`OPENCODE_GO_API_KEY`, default model `kimi-k2.7-code`), general OpenCode inference key (`OPENCODE_API_KEY`, default `kimi-k2.5`), direct OpenAI key (`OPENAI_API_KEY`, default `gpt-4.1-mini`), or generic compatible provider (`LLM_API_KEY`, `LLM_BASE_URL`, `LLM_MODEL`). OpenCode Go calls are identified with a per-request `x-opencode-session` header. Invalid or unavailable model responses fall back safely and print a non-sensitive reason in the terminal; API keys and request contents are never logged.
 
 ## Modify for the official target
 
